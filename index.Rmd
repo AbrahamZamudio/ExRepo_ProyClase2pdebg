@@ -44,12 +44,58 @@ knitr::kable(d)
 ```
 
 
-
-Tablas {data-icon="fa-table"}
+<!-- Esto es lo que hemos modificado : la tercera pestaña  -->
+Graficos usando  plotly {data-icon="fa-table"}
 =================================================
-### Tabla 1
+
+### Grafico pie
+
 ```{r}
-help(rnorm)
+library(plotly)
+
+USPersonalExpenditure <- data.frame("Categorie"=rownames(USPersonalExpenditure), USPersonalExpenditure)
+data <- USPersonalExpenditure[,c('Categorie', 'X1960')]
+
+fig <- plot_ly(data, labels = ~Categorie, values = ~X1960, type = 'pie')
+fig <- fig %>% layout(title = 'United States Personal Expenditures by Categories in 1960',
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+fig
+
 ```
 
+### Series de tiempo
+```{r, include=FALSE}
+library(tidyquant)
+library(plotly)
+
+getSymbols("GOOG",
+             from = "2018-01-01",
+             to = "2019-12-31")
+```
+
+```{r}
+stock <- data.frame(GOOG$GOOG.Adjusted)
+stock$GOOG.Adjusted <- stock$GOOG.Adjusted/stock$GOOG.Adjusted[1]
+stock <- data.frame(stock,rownames(stock))
+colnames(stock) <- append('GOOG','date')
+
+fig <- plot_ly(stock, type = 'scatter', mode = 'lines')%>%
+  add_trace(x = ~date, y = ~GOOG, name = 'GOOG')%>%
+  layout(showlegend = F)
+options(warn = -1)
+
+fig <- fig %>%
+  layout(
+         xaxis = list(zerolinecolor = '#ffff',
+                      zerolinewidth = 2,
+                      gridcolor = 'ffff'),
+         yaxis = list(zerolinecolor = '#ffff',
+                      zerolinewidth = 2,
+                      gridcolor = 'ffff'),
+         plot_bgcolor='#e5ecf6', width = 900)
+
+fig
+```
 
