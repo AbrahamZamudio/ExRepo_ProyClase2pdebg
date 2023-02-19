@@ -1,0 +1,55 @@
+---
+title: "Analisis Descriptivo"
+author: "Abraham Zamudio"
+date: "2023-02-19"
+output: flexdashboard::flex_dashboard
+---
+
+Visualizaciones {data-icon="fa-signal"}
+=================================================
+
+### Grafico 1
+```{r Erick}
+library(ggplot2)
+ggplot(mtcars, aes(mpg, qsec))+
+  geom_point(aes(size = hp) , alpha = 0.4)+
+  facet_grid(factor(cyl) ~ factor(am), scale = "free")+
+    xlab("Variable Independiente")+
+    ylab("Var. Dependiente")+
+    ggtitle("Dataset : mtcasrs")+
+    labs(size = "Caballos de Fuerza")
+```
+
+### Grafico 2 
+```{r Flor}
+library(gridExtra)
+df <- data.frame(x = 1:10, y = rnorm(100))
+p1 <- ggplot(df, aes(x,y)) + geom_point()
+p2 <- ggplot(df, aes(y)) + geom_histogram()
+grid.arrange(p1, p2)
+```
+
+Tablas {data-icon="fa-table"}
+=================================================
+### Tabla 1
+```{r}
+knitr::kable(head(mtcars[, 1:4]), "simple")
+```
+
+### Tabla 2
+```{r}
+m <- lm(dist ~ speed, data = cars)
+d <- coef(summary(m))
+knitr::kable(d)
+```
+
+
+
+Tablas {data-icon="fa-table"}
+=================================================
+### Tabla 1
+```{r}
+help(rnorm)
+```
+
+
